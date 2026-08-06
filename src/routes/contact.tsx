@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { CONTACT } from "@/components/site-footer";
+import { ShareButton } from "@/components/share-button";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -53,6 +54,16 @@ function Contact() {
             <p className="mt-1 break-all text-sm text-muted-foreground">{l.value}</p>
           </a>
         ))}
+      </section>
+
+      <section className="mx-auto max-w-4xl px-4 pb-14">
+        <div className="mgb-shadow rounded-md border-2 border-foreground bg-card p-6">
+          <h2 className="font-display text-2xl">Share MGB Report</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Send the site link to a friend by email, or copy it and paste anywhere.
+          </p>
+          <ShareButton className="mt-4" />
+        </div>
       </section>
     </SiteLayout>
   );
