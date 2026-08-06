@@ -4,8 +4,8 @@ export const CONTACT = {
   email: "akinbinumarvellous@gmail.com",
   whatsapp: "+2349054360650",
   whatsappHref: "https://wa.me/2349054360650",
-  instagram: "@mgbreport", // placeholder — update when handle is confirmed
-  instagramHref: "https://instagram.com/mgbreport",
+  instagram: "@mgb51068",
+  instagramHref: "https://instagram.com/mgb51068",
 };
 
 export function SiteFooter() {
