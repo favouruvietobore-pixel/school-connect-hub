@@ -1,4 +1,5 @@
 import { Instagram, Mail, MessageCircle } from "lucide-react";
+import { ShareButton } from "@/components/share-button";
 
 export const CONTACT = {
   email: "akinbinumarvellous@gmail.com",
@@ -50,6 +51,8 @@ export function SiteFooter() {
           <p className="mt-3 font-display text-xl leading-tight">
             🔥 MGB GAT YOU COVERED 🔥
           </p>
+          <p className="mt-4 text-sm text-background/70">Share MGB Report with a friend</p>
+          <ShareButton className="mt-2" />
         </div>
       </div>
       <div className="border-t border-background/20 py-4 text-center text-xs text-background/60">
