@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SchoolRouteImport } from './routes/school'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as MemesRouteImport } from './routes/memes'
 import { Route as DesignRouteImport } from './routes/design'
@@ -23,6 +24,11 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 const SchoolRoute = SchoolRouteImport.update({
   id: '/school',
   path: '/school',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportsRoute = ReportsRouteImport.update({
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/design': typeof DesignRoute
   '/memes': typeof MemesRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/school': typeof SchoolRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/design': typeof DesignRoute
   '/memes': typeof MemesRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/school': typeof SchoolRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/design': typeof DesignRoute
   '/memes': typeof MemesRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/school': typeof SchoolRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/design'
     | '/memes'
     | '/reports'
+    | '/reset-password'
     | '/school'
     | '/admin'
   fileRoutesByTo: FileRoutesByTo
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/design'
     | '/memes'
     | '/reports'
+    | '/reset-password'
     | '/school'
     | '/admin'
   id:
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/design'
     | '/memes'
     | '/reports'
+    | '/reset-password'
     | '/school'
     | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   DesignRoute: typeof DesignRoute
   MemesRoute: typeof MemesRoute
   ReportsRoute: typeof ReportsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SchoolRoute: typeof SchoolRoute
 }
 
@@ -161,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/school'
       fullPath: '/school'
       preLoaderRoute: typeof SchoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reports': {
@@ -249,6 +269,7 @@ const rootRouteChildren: RootRouteChildren = {
   DesignRoute: DesignRoute,
   MemesRoute: MemesRoute,
   ReportsRoute: ReportsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SchoolRoute: SchoolRoute,
 }
 export const routeTree = rootRouteImport
