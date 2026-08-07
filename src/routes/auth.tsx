@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/site-layout";
 import { Button } from "@/components/ui/button";
@@ -21,9 +22,10 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
@@ -37,7 +39,14 @@ function AuthPage() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      if (mode === "signup") {
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Reset link sent! Check your email.");
+        setMode("signin");
+      } else if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -64,11 +73,15 @@ function AuthPage() {
     <SiteLayout>
       <Toaster />
       <section className="mx-auto flex max-w-md flex-col px-4 py-12">
-        <h1 className="font-display text-5xl">{mode === "signin" ? "Sign In" : "Sign Up"}</h1>
+        <h1 className="font-display text-5xl">
+          {mode === "signin" ? "Sign In" : mode === "signup" ? "Sign Up" : "Reset Password"}
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {mode === "signin"
             ? "Welcome back to MGB Report."
-            : "Join the MGB fam — stay informed and laugh out loud."}
+            : mode === "signup"
+              ? "Join the MGB fam — stay informed and laugh out loud."
+              : "Enter your email and we'll send you a reset link."}
         </p>
 
         <form onSubmit={submit} className="mgb-shadow mt-6 space-y-4 rounded-md border-2 border-foreground bg-card p-6">
@@ -76,24 +89,65 @@ function AuthPage() {
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
-          </div>
+          {mode !== "forgot" && (
+            <div className="space-y-1.5">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+            </div>
+          )}
           <Button type="submit" className="w-full" disabled={submitting}>
-            {submitting ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+            {submitting ? "Please wait…" : mode === "signin" ? "Sign in" : mode === "signup" ? "Create account" : "Send reset link"}
           </Button>
+          {mode === "signin" && (
+            <button
+              type="button"
+              className="w-full text-center text-sm font-semibold text-primary hover:underline"
+              onClick={() => setMode("forgot")}
+            >
+              Forgot password?
+            </button>
+          )}
+          {mode === "forgot" && (
+            <button
+              type="button"
+              className="w-full text-center text-sm font-semibold text-primary hover:underline"
+              onClick={() => setMode("signin")}
+            >
+              ← Back to sign in
+            </button>
+          )}
         </form>
 
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          {mode === "signin" ? "New to MGB?" : "Already have an account?"}{" "}
-          <button
-            className="font-semibold text-primary hover:underline"
-            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          >
-            {mode === "signin" ? "Create an account" : "Sign in"}
-          </button>
-        </p>
+        {mode !== "forgot" && (
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            {mode === "signin" ? "New to MGB?" : "Already have an account?"}{" "}
+            <button
+              className="font-semibold text-primary hover:underline"
+              onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+            >
+              {mode === "signin" ? "Create an account" : "Sign in"}
+            </button>
+          </p>
+        )}
 
         <Link to="/" className="mt-6 text-center text-sm text-muted-foreground hover:underline">
           ← Back home
