@@ -15,13 +15,23 @@ export function useAuth() {
       const u = session?.user ?? null;
       setUser(u);
       if (u) {
-        const { data } = await supabase
+        let admin = false;
+        const { data, error } = await supabase
           .from("user_roles")
           .select("role")
           .eq("user_id", u.id)
           .eq("role", "admin")
           .maybeSingle();
-        if (mounted) setIsAdmin(!!data);
+        if (data) admin = true;
+        if (!data || error) {
+          // Fallback: security-definer check in case the table read is blocked.
+          const { data: rpc } = await supabase.rpc("has_role", {
+            _user_id: u.id,
+            _role: "admin",
+          });
+          admin = admin || rpc === true;
+        }
+        if (mounted) setIsAdmin(admin);
       } else {
         setIsAdmin(false);
       }
