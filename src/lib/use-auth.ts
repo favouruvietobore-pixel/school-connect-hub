@@ -9,39 +9,45 @@ export function useAuth() {
 
   useEffect(() => {
     let mounted = true;
+    let roleRequest = 0;
 
-    const applySession = async (session: Session | null) => {
+    const loadRole = async (sessionUser: User) => {
+      const request = ++roleRequest;
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", sessionUser.id)
+        .eq("role", "admin")
+        .limit(1)
+        .maybeSingle();
+
+      if (!mounted || request !== roleRequest) return;
+      setIsAdmin(!error && data?.role === "admin");
+      setLoading(false);
+    };
+
+    const applySession = (session: Session | null) => {
       if (!mounted) return;
-      const u = session?.user ?? null;
-      setUser(u);
-      if (u) {
-        let admin = false;
-        const { data, error } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", u.id)
-          .eq("role", "admin")
-          .maybeSingle();
-        if (data) admin = true;
-        if (!data || error) {
-          // Fallback: security-definer check in case the table read is blocked.
-          const { data: rpc } = await supabase.rpc("has_role", {
-            _user_id: u.id,
-            _role: "admin",
-          });
-          admin = admin || rpc === true;
-        }
-        if (mounted) setIsAdmin(admin);
-      } else {
-        setIsAdmin(false);
+      const sessionUser = session?.user ?? null;
+      setUser(sessionUser);
+      setIsAdmin(false);
+
+      if (!sessionUser) {
+        roleRequest += 1;
+        setLoading(false);
+        return;
       }
-      if (mounted) setLoading(false);
+
+      setLoading(true);
+      void loadRole(sessionUser);
     };
 
     supabase.auth.getSession().then(({ data }) => applySession(data.session));
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      applySession(session);
+      // Keep the auth callback synchronous. Awaiting another backend request
+      // inside it can block the auth client's session lock on some browsers.
+      window.setTimeout(() => applySession(session), 0);
     });
 
     return () => {
