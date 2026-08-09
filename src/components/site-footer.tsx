@@ -1,5 +1,7 @@
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { ShareButton } from "@/components/share-button";
+import { NewsletterForm } from "@/components/newsletter-form";
+import { Button } from "@/components/ui/button";
 
 export const CONTACT = {
   email: "akinbinumarvellous@gmail.com",
@@ -44,6 +46,10 @@ export function SiteFooter() {
               </a>
             </li>
           </ul>
+           <Button className="mt-4" size="sm" variant="outline" asChild>
+             <a href={CONTACT.instagramHref} target="_blank" rel="noreferrer"><Instagram /> Follow MGB</a>
+           </Button>
+           <NewsletterForm />
         </div>
 
         <div>

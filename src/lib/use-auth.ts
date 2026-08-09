@@ -13,16 +13,13 @@ export function useAuth() {
 
     const loadRole = async (sessionUser: User) => {
       const request = ++roleRequest;
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", sessionUser.id)
-        .eq("role", "admin")
-        .limit(1)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("has_role", {
+        _user_id: sessionUser.id,
+        _role: "admin",
+      });
 
       if (!mounted || request !== roleRequest) return;
-      setIsAdmin(!error && data?.role === "admin");
+      setIsAdmin(!error && data === true);
       setLoading(false);
     };
 
