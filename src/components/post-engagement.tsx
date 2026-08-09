@@ -43,29 +43,11 @@ export function PostEngagement({ postId, title }: { postId: string; title: strin
 
   const toggleLike = async () => {
     if (!user) return;
-
-    if (liked) {
-      const { error } = await supabase.from("post_likes").delete().eq("post_id", postId).eq("user_id", user.id);
-      if (!error) {
-        setLiked(false);
-        setLikes((value) => Math.max(0, value - 1));
-      }
-      return;
-    }
-
-    const { error } = await supabase.from("post_likes").insert({ post_id: postId, user_id: user.id });
-    if (!error) {
-      setLiked(true);
-      setLikes((value) => value + 1);
-      return;
-    }
-
-    if (error.code === "23505") {
-      const { error: removeError } = await supabase.from("post_likes").delete().eq("post_id", postId).eq("user_id", user.id);
-      if (!removeError) {
-        setLiked(false);
-        setLikes((value) => Math.max(0, value - 1));
-      }
+    const { data, error } = await supabase.rpc("toggle_post_like", { _post_id: postId });
+    const result = data?.[0];
+    if (!error && result) {
+      setLiked(result.liked);
+      setLikes(Number(result.like_count));
     }
   };
 
