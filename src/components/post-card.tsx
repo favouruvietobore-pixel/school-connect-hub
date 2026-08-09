@@ -1,4 +1,5 @@
 import type { Database } from "@/integrations/supabase/types";
+import { PostEngagement } from "@/components/post-engagement";
 
 type Post = Database["public"]["Tables"]["posts"]["Row"];
 
@@ -13,7 +14,7 @@ const CATEGORY_LABEL: Record<Post["category"], string> = {
 
 export function PostCard({ post }: { post: Post }) {
   return (
-    <article className="mgb-shadow group flex flex-col overflow-hidden rounded-md border-2 border-foreground bg-card transition-transform hover:-translate-y-0.5">
+    <article id={`post-${post.id}`} className="mgb-shadow group flex flex-col overflow-hidden rounded-md border-2 border-foreground bg-card transition-transform hover:-translate-y-0.5">
       {post.image_url && (
         <div className="aspect-video overflow-hidden border-b-2 border-foreground bg-muted">
           <img
@@ -36,6 +37,7 @@ export function PostCard({ post }: { post: Post }) {
         <h3 className="font-display text-2xl leading-tight text-foreground">{post.title}</h3>
         <p className="line-clamp-4 whitespace-pre-wrap text-sm text-muted-foreground">{post.content}</p>
       </div>
+      <PostEngagement postId={post.id} title={post.title} />
     </article>
   );
 }
