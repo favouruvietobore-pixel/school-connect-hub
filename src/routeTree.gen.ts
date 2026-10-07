@@ -9,51 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SchoolRouteImport } from './routes/school'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as ReportsRouteImport } from './routes/reports'
-import { Route as MemesRouteImport } from './routes/memes'
-import { Route as DesignRouteImport } from './routes/design'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DesignRouteImport } from './routes/design'
+import { Route as MemesRouteImport } from './routes/memes'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SchoolRouteImport } from './routes/school'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
-const SchoolRoute = SchoolRouteImport.update({
-  id: '/school',
-  path: '/school',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportsRoute = ReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MemesRoute = MemesRouteImport.update({
-  id: '/memes',
-  path: '/memes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DesignRoute = DesignRouteImport.update({
-  id: '/design',
-  path: '/design',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -61,13 +35,39 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignRoute = DesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemesRoute = MemesRouteImport.update({
+  id: '/memes',
+  path: '/memes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchoolRoute = SchoolRouteImport.update({
+  id: '/school',
+  path: '/school',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
@@ -169,60 +169,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/school': {
-      id: '/school'
-      path: '/school'
-      fullPath: '/school'
-      preLoaderRoute: typeof SchoolRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reports': {
-      id: '/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof ReportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/memes': {
-      id: '/memes'
-      path: '/memes'
-      fullPath: '/memes'
-      preLoaderRoute: typeof MemesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/design': {
-      id: '/design'
-      path: '/design'
-      fullPath: '/design'
-      preLoaderRoute: typeof DesignRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -232,11 +183,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/design': {
+      id: '/design'
+      path: '/design'
+      fullPath: '/design'
+      preLoaderRoute: typeof DesignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memes': {
+      id: '/memes'
+      path: '/memes'
+      fullPath: '/memes'
+      preLoaderRoute: typeof MemesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/school': {
+      id: '/school'
+      path: '/school'
+      fullPath: '/school'
+      preLoaderRoute: typeof SchoolRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
